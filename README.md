@@ -1,2 +1,2 @@
 # scrap-metal
-Scrapmetal Team Code Repo
+Scrapmetal Team
