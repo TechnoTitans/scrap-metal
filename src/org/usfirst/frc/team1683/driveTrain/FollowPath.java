@@ -1,9 +1,10 @@
 package org.usfirst.frc.team1683.driveTrain;
-
+import org.usfirst.team1683.PistonFire.Fire;
 import java.util.ArrayList;
 
 import org.usfirst.frc.team1683.constants.Constants;
 import org.usfirst.frc.team1683.driverStation.SmartDashboard;
+import org.usfirst.team1683.PistonFire.Reload;
 
 public class FollowPath {
 	private TankDrive drive;
@@ -17,7 +18,7 @@ public class FollowPath {
 	private boolean lastDirection = true;
 	private boolean lastCurve;
 
-	public FollowPath(TankDrive drive) {
+	public FollowPath(TankDrive drive, Reload flyWheel, Fire firing) {
 		this.drive = drive;
 		pathPoints.add(new PathPoint(63.0,158.0));
 		pathPoints.add(new PathPoint(90.0,184.0));
@@ -28,15 +29,16 @@ public class FollowPath {
 		pathPoints.add(new PathPoint(150.0,93.0));
 		pathPoints.add(new PathPoint(148.0,211.0));
 		pathPoints.add(new PathPoint(102.0,110.0));
-
+		
 		currPoint = pathPoints.get(0);
 		nexPoint = pathPoints.get(1);
 		lastDirection = (nexPoint.getX() - currPoint.getX()) > 0;
 		mover = new DriveTrainMover(drive, calDistTravel()[0], calDistTravel()[1],
 				lastCurve ? SPEED : Math.abs(calDistTravel()[0] / calDistTravel()[1]) * SPEED,
 				lastCurve ? Math.abs(calDistTravel()[1] / calDistTravel()[0]) * SPEED : SPEED);
+		
 	}
-
+		
 	public void run() {
 		SmartDashboard.sendData("CurrentlyRunning", index, true);
 		SmartDashboard.sendData(index + " CalDistance1", calDistTravel()[0], true);
@@ -64,6 +66,8 @@ public class FollowPath {
 				}
 			}
 		}
+		
+		
 	}
 
 	private double[] calDistTravel() {
@@ -115,5 +119,9 @@ public class FollowPath {
 
 	public static double atan2(PathPoint center, PathPoint point) {
 		return PathPoint.atan2(center, point);
+	}
+	
+	public static void Fire(){
+		
 	}
 }

@@ -1,10 +1,19 @@
 package org.usfirst.frc.team1683.robot;
 
+
+import java.util.Date;
+
 import org.usfirst.frc.team1683.constants.HWR;
 import org.usfirst.frc.team1683.driveTrain.DriveTrain;
 import org.usfirst.frc.team1683.driverStation.DriverSetup;
 import org.usfirst.frc.team1683.driverStation.SmartDashboard;
 import org.usfirst.frc.team1683.vision.PiVisionReader;
+import org.usfirst.team1683.PistonFire.Fire;
+import org.usfirst.team1683.PistonFire.Reload;
+
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.Timer;
 
 /**
  * Handles all joystick inputs
@@ -12,9 +21,13 @@ import org.usfirst.frc.team1683.vision.PiVisionReader;
 public class Controls {
 	public static boolean[] toggle = new boolean[11];
 	public static boolean[][] joystickCheckToggle = new boolean[3][11];
-
+	
+	Timer timer;
+	
 	DriveTrain drive;
 	PiVisionReader piReader;
+	
+	Reload wheel; 
 
 	private boolean frontMode = true;
 
@@ -24,21 +37,38 @@ public class Controls {
 
 	private final double MAX_JOYSTICK_SPEED = 0.5;
 	private final double SECOND_JOYSTICK_SPEED = 0.35;
+	private Fire firing;
 
 	private InputFilter rightFilter, leftFilter;
+	
+	boolean isFire;
+	boolean isReload;
+ 
 
 	private double p = 0.74;
+	
 	private double i = 0.0;
 	private double d = 0.0;
 
-	public Controls(DriveTrain drive) {
+	
+	public Controls(DriveTrain drive, Reload fly, Fire firingMech) {
 		this.drive = drive;
+		timer = new Timer(); 
+		firing = firingMech;
+		timer.reset();
+		
+		isFire = false;
+		isReload = false;
+
 		SmartDashboard.prefDouble("ap", p);
 		SmartDashboard.prefDouble("ai", i);
 		SmartDashboard.prefDouble("ad", d);
 
 		rightFilter = new InputFilter(0.86);
 		leftFilter = new InputFilter(0.86);
+		
+		
+		wheel = fly; 
 	}
 
 	public void run() {
@@ -64,7 +94,28 @@ public class Controls {
 			maxPower = MAX_JOYSTICK_SPEED;
 		else if (DriverSetup.leftStick.getRawButton(HWR.SECOND_POWER))
 			maxPower = SECOND_JOYSTICK_SPEED;
-
+		
+		if(DriverSetup.leftStick.getRawButton(3)){
+			wheel.ReloadFly();
+		} else if(DriverSetup.rightStick.getRawButton(3) && !isFire){
+			isFire = true;
+			timer.reset();
+			timer.start();
+			firing.fireTheBall();
+		} 
+		
+		if(isFire){
+			if(timer.get() < 2){
+				firing.stopFiring();
+				isFire = false; 
+			} 
+		}
+		
+		if(firing.getPress() < 80){
+			firing.startCompress();
+		} else if(firing.getPress() >= 80){
+			firing.endCompress();
+		} 
 		drive.driveMode(lSpeed, rSpeed);
 	}
 

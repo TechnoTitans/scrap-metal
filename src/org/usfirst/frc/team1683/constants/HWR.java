@@ -3,16 +3,24 @@ package org.usfirst.frc.team1683.constants;
 public class HWR {
 
 	// Motors
+	public static final int FLY_WHEEL = HWP.CAN_10; 
 	public static final int RIGHT_DRIVE_TRAIN_FRONT = HWP.CAN_7;
-	public static final int RIGHT_DRIVE_TRAIN_MIDDLE = HWP.CAN_8;
 	public static final int RIGHT_DRIVE_TRAIN_BACK = HWP.CAN_9;
+	public static final int RIGHT_DRIVE_TRAIN_MIDDLE = HWP.CAN_8; 
 	public static final int LEFT_DRIVE_TRAIN_FRONT = HWP.CAN_6;
-	public static final int LEFT_DRIVE_TRAIN_MIDDLE = HWP.CAN_5;
-	public static final int LEFT_DRIVE_TRAIN_BACK = HWP.CAN_4;
-
+	public static final int LEFT_DRIVE_TRAIN_BACK = HWP.CAN_4; 
+	public static final int LEFT_DRIVE_TRAIN_MIDDLE = HWP.CAN_5;  
 	// encoders
 	public static final int LEFT_DRIVE_ENCODER = HWP.CAN_7;
 	public static final int RIGHT_DRIVE_ENCODER = HWP.CAN_6;
+	
+	// Piston
+	public static final int PISTON_DRIVE = HWP.CAN_11;
+	public static final int COMPRESSOR_INPUT = HWP.CAN_11;
+	public static final int SOLENOID_INPUT = HWP.CAN_11;
+	public static final int PSI_GAUGE = HWP.CAN_11;
+	
+	
 
 	// Joysticks
 	public static final int LEFT_JOYSTICK = HWP.JOY_0;
